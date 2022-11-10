@@ -145,10 +145,68 @@ namespace DURLIB
                       { return (isalpha(ch)); });
     }
 
+    int Letters(const std::string &text)
+    {
+        int count = 0;
+        for(int i = 0; i < text.size(); i++)
+        {
+            if(isalpha(text[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     bool isNumbers(const std::string_view &text)
     {
         return all_of(text.begin(), text.end(), [](char ch)
                       { return (isdigit(ch)); });
+    }
+
+    int Numbers(const std::string &text)
+    {
+        int count = 0;
+        for(int i = 0; i < text.size(); i++)
+        {
+            if(isdigit(text[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // int Symbols(const std::string &text)
+    // {
+    //     int count = 0;
+    //     for(int i = 0; i < text.size(); i++)
+    //     {
+    //         if(iss(text[i]))
+    //         {
+    //             count++;
+    //         }
+    //     }
+    //     return count;
+    // }
+
+    int CountNegation(const std::string &text)
+    {
+        int count = 0;
+        for(int i = 0; i < text.size(); i++)
+        {
+            if(text[i] == '-')
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    bool hasNegation(const std::string_view &text)
+    {
+        return all_of(text.begin(), text.end(), [](char ch)
+                        { return (ch == '-'); });
     }
 
     bool oneCapital(const std::string &text)

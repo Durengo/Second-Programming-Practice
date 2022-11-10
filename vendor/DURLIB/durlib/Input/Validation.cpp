@@ -10,9 +10,14 @@ namespace DURLIB
     // RETURN -1 IF INPUT NOT VALID
     bool CanBeInt(const std::string &input)
     {
-        if (!isNumbers(input))
+        if (isLetters(input) || Letters(input) > 0)
         {
             CLI_ERROR("{0} CONTAINS LETTERS WHEN CONVERTING TO INT", input);
+            return false;
+        }
+        if (CountNegation(input) > 1)
+        {
+            CLI_ERROR("{0} CONTAINS TOO MANY NEGATION SYMBOLS", input);
             return false;
         }
         int converted;
@@ -38,7 +43,7 @@ namespace DURLIB
 
     int STOI(const std::string &input)
     {
-        if (!isNumbers(input))
+        if (isLetters(input))
         {
             CLI_ERROR("{0} CONTAINS LETTERS WHEN CONVERTING TO INT", input);
             return -1;

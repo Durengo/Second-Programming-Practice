@@ -1,5 +1,24 @@
 #include "Fraction.h"
 
+Fraction::Fraction()
+    : Numerator(0), Denominator(1)
+{
+}
+
+Fraction::Fraction(int num)
+{
+    if (num == 0)
+    {
+        Numerator = 0;
+        Denominator = 1;
+    }
+    else
+    {
+        Denominator = 1;
+        FormatFraction(num, Denominator);
+    }
+}
+
 Fraction::Fraction(int num, int denom)
 {
     if (denom == 0)
@@ -15,7 +34,7 @@ Fraction::Fraction(int num, int denom)
     }
     else
     {
-        Simplify(num, denom);
+        FormatFraction(num, denom);
     }
 }
 
@@ -26,36 +45,16 @@ Fraction::~Fraction()
 int Fraction::GCD(int a, int b)
 {
     if (a == 0)
+    {
         return b;
-    return GCD(b % a, a);
-}
-
-void Fraction::Simplify()
-{
-    int temp = GCD(Numerator, Denominator);
-    Numerator = Numerator / temp;
-    Denominator = Denominator / temp;
-}
-
-void Fraction::Simplify(Fraction frac)
-{
-    int sign = 1;
-    if (frac.Numerator < 0)
-    {
-        sign *= -1;
-        frac.Numerator *= -1;
     }
-    if (frac.Denominator < 0)
+    else
     {
-        sign *= -1;
-        frac.Denominator *= -1;
+        return GCD(b % a, a);
     }
-    int temp = GCD(frac.Numerator, frac.Denominator);
-    frac.Numerator = frac.Numerator / temp * sign;
-    frac.Denominator = frac.Denominator / temp;
 }
 
-void Fraction::Simplify(int &num, int &denom)
+void Fraction::FormatFraction(int &num, int &denom)
 {
     int sign = 1;
     if (num < 0)
@@ -73,57 +72,66 @@ void Fraction::Simplify(int &num, int &denom)
     Denominator = denom / temp;
 }
 
+// Function for objects to call externally.
 // ADDITION
-void Fraction::Addition(Fraction FracRight)
+Fraction Fraction::Addition(Fraction FracRight)
 {
     Numerator = Numerator * FracRight.Denominator + FracRight.Numerator * Denominator;
     Denominator = Denominator * FracRight.Denominator;
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
-void Fraction::Addition(int (&FracRight)[2])
+Fraction Fraction::Addition(int (&FracRight)[2])
 {
     Numerator = Numerator * FracRight[1] + FracRight[0] * Denominator;
     Denominator = Denominator * FracRight[1];
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
 // SUBTRACTION
-void Fraction::Subtraction(Fraction FracRight)
+Fraction Fraction::Subtraction(Fraction FracRight)
 {
     Numerator = Numerator * FracRight.Denominator - FracRight.Numerator * Denominator;
     Denominator = Denominator * FracRight.Denominator;
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
-void Fraction::Subtraction(int (&FracRight)[2])
+Fraction Fraction::Subtraction(int (&FracRight)[2])
 {
     Numerator = Numerator * FracRight[1] - FracRight[0] * Denominator;
     Denominator = Denominator * FracRight[1];
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
 // MULTIPLICATION
-void Fraction::Multiplication(Fraction FracRight)
+Fraction Fraction::Multiplication(Fraction FracRight)
 {
     Numerator = Numerator * FracRight.Numerator;
     Denominator = Denominator * FracRight.Denominator;
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
-void Fraction::Multiplication(int (&FracRight)[2])
+Fraction Fraction::Multiplication(int (&FracRight)[2])
 {
     Numerator = Numerator * FracRight[0];
     Denominator = Denominator * FracRight[1];
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
 // DIVISION
-void Fraction::Division(Fraction FracRight)
+Fraction Fraction::Division(Fraction FracRight)
 {
     Numerator = Numerator * FracRight.Denominator;
     Denominator = Denominator * FracRight.Numerator;
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
-void Fraction::Division(int (&FracRight)[2])
+Fraction Fraction::Division(int (&FracRight)[2])
 {
     Numerator = Numerator * FracRight[0];
     Denominator = Denominator * FracRight[1];
-    Simplify();
+    FormatFraction(Numerator, Denominator);
+    return *this;
 }
 // MORE
 bool Fraction::More(Fraction FracRight)
@@ -141,15 +149,120 @@ bool Fraction::More(int (&FracRight)[2])
     return frac1 > frac2;
 }
 // NEGATIVE
-void Fraction::Negative()
+Fraction Fraction::Negative()
 {
     Numerator *= -1;
+    return *this;
 }
+// Output
 void Fraction::Print()
 {
     CLI_TRACE("{0}/{1}", Numerator, Denominator);
 }
+// Input
+void Fraction::Set()
+{
+    CLI_INFO("Enter Fraction:");
+    std::cin >> *this;
+    CLI_WARN("Fraction set to {}", *this);
+}
+void Fraction::Set(const std::string &Temp_Fraction_Name)
+{
+    CLI_INFO("Enter Fraction \"{}\":", Temp_Fraction_Name);
+    std::cin >> *this;
+    CLI_WARN("Fraction \"{}\" set to {}", Temp_Fraction_Name, *this);
+}
 
+// Binary operations for fractions:
+// Arithmetic operators:
+Fraction operator+(const Fraction &FracLeft, const Fraction &FracRight)
+{
+    Fraction temp(FracLeft.Numerator * FracRight.Denominator + FracRight.Numerator * FracLeft.Denominator,
+                  FracLeft.Denominator * FracRight.Denominator);
+    temp.FormatFraction(temp.Numerator, temp.Denominator);
+    return temp;
+}
+Fraction operator-(const Fraction &FracLeft, const Fraction &FracRight)
+{
+    Fraction temp(FracLeft.Numerator * FracRight.Denominator - FracRight.Numerator * FracLeft.Denominator,
+                  FracLeft.Denominator * FracRight.Denominator);
+    temp.FormatFraction(temp.Numerator, temp.Denominator);
+    return temp;
+}
+Fraction operator*(const Fraction &FracLeft, const Fraction &FracRight)
+{
+    Fraction temp(FracLeft.Numerator * FracRight.Numerator,
+                  FracLeft.Denominator * FracRight.Denominator);
+    temp.FormatFraction(temp.Numerator, temp.Denominator);
+    return temp;
+}
+Fraction operator/(const Fraction &FracLeft, const Fraction &FracRight)
+{
+    Fraction temp(FracLeft.Numerator * FracRight.Denominator, FracLeft.Denominator * FracRight.Numerator);
+    temp.FormatFraction(temp.Numerator, temp.Denominator);
+    return temp;
+}
+// Relation operators:
+bool Fraction::operator==(const Fraction &FracRight) const
+{
+    return ((this->Numerator == FracRight.Numerator) && (this->Denominator == FracRight.Denominator));
+}
+bool Fraction::operator!=(const Fraction &FracRight) const
+{
+    return ((this->Numerator != FracRight.Numerator) || (this->Denominator != FracRight.Denominator));
+}
+bool Fraction::operator>(const Fraction &FracRight) const
+{
+    int frac1 = this->Numerator * FracRight.Denominator;
+    int frac2 = this->Denominator * FracRight.Numerator;
+    return (frac1 > frac2);
+}
+bool Fraction::operator>=(const Fraction &FracRight) const
+{
+    int frac1 = this->Numerator * FracRight.Denominator;
+    int frac2 = this->Denominator * FracRight.Numerator;
+    return (frac1 >= frac2);
+}
+bool Fraction::operator<(const Fraction &FracRight) const
+{
+    int frac1 = this->Numerator * FracRight.Denominator;
+    int frac2 = this->Denominator * FracRight.Numerator;
+    return (frac1 < frac2);
+}
+bool Fraction::operator<=(const Fraction &FracRight) const
+{
+    int frac1 = this->Numerator * FracRight.Denominator;
+    int frac2 = this->Denominator * FracRight.Numerator;
+    return (frac1 <= frac2);
+}
+// Assignment operators:
+Fraction operator+=(Fraction &FracLeft, const Fraction &FracRight)
+{
+    FracLeft = Fraction(FracLeft.Numerator * FracRight.Denominator + FracRight.Numerator * FracLeft.Denominator,
+                        FracLeft.Denominator * FracRight.Denominator);
+    FracLeft.FormatFraction(FracLeft.Numerator, FracLeft.Denominator);
+    return FracLeft;
+}
+Fraction operator-=(Fraction &FracLeft, const Fraction &FracRight)
+{
+    FracLeft = Fraction(FracLeft.Numerator * FracRight.Denominator - FracRight.Numerator * FracLeft.Denominator,
+                        FracLeft.Denominator * FracRight.Denominator);
+    FracLeft.FormatFraction(FracLeft.Numerator, FracLeft.Denominator);
+    return FracLeft;
+}
+Fraction operator*=(Fraction &FracLeft, const Fraction &FracRight)
+{
+    FracLeft = Fraction(FracLeft.Numerator * FracRight.Numerator, FracLeft.Denominator * FracRight.Denominator);
+    FracLeft.FormatFraction(FracLeft.Numerator, FracLeft.Denominator);
+    return FracLeft;
+}
+Fraction operator/=(Fraction &FracLeft, const Fraction &FracRight)
+{
+    FracLeft = Fraction(FracLeft.Numerator * FracRight.Numerator, FracLeft.Denominator * FracRight.Denominator);
+    FracLeft.FormatFraction(FracLeft.Numerator, FracLeft.Denominator);
+    return FracLeft;
+}
+// Input/Output operators:
 std::ostream &operator<<(std::ostream &out, const Fraction &frac)
 {
     if (frac.Denominator == 1)
@@ -162,7 +275,6 @@ std::ostream &operator<<(std::ostream &out, const Fraction &frac)
     }
     return out;
 }
-
 std::istream &operator>>(std::istream &in, Fraction &frac)
 {
     std::string input;
@@ -170,25 +282,26 @@ std::istream &operator>>(std::istream &in, Fraction &frac)
     int a = 0, b = 0;
     while (true)
     {
-        CLI_TRACE("PLEASE ENTER THE FRACTION [number/number]");
+        CLI_TRACE("ENTER THE FRACTION IN THIS FORMAT -> [number/number]");
         in >> input;
         in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        CLI_INFO(" IS SPACE = {0}", DURLIB::HasWhitespace(input));
+        // CLI_INFO(" IS SPACE = {0}", DURLIB::HasWhitespace(input));
         if (input.find('/') != std::string::npos)
         {
             aText = input.substr(0, input.find('/'));
             bText = input.substr(input.find('/') + 1, input.length());
-            CLI_TRACE("A (TEXT) = {0}, B (TEXT) = {1}", aText, bText);
+            // CLI_TRACE("A (TEXT) = {0}, B (TEXT) = {1}", aText, bText);
             if (DURLIB::CanBeInt(aText) && DURLIB::CanBeInt(bText))
             {
                 a = DURLIB::STOI(aText);
                 b = DURLIB::STOI(bText);
-                CLI_TRACE("A (INT) = {0}, B (INT) = {1}", a, b);
+                // CLI_TRACE("A (INT) = {0}, B (INT) = {1}", a, b);
                 break;
             }
             else
             {
-                CLI_ERROR("NOT NUMBERS");
+                // CLI_ERROR("NOT NUMBERS");
+                CLI_ERROR("INCORRECT FORMAT");
             }
         }
         else
@@ -199,73 +312,12 @@ std::istream &operator>>(std::istream &in, Fraction &frac)
 
     frac.Numerator = a;
     frac.Denominator = b;
+    frac.FormatFraction(frac.Numerator, frac.Denominator);
     return in;
 }
-
-Fraction operator+(const Fraction &FracLeft, const Fraction &FracRight)
+// Negation operator:
+Fraction operator-(const Fraction &Frac)
 {
-    Fraction temp(FracLeft.Numerator * FracRight.Denominator + FracRight.Numerator * FracLeft.Denominator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    temp.Simplify(temp.Numerator, temp.Denominator);
-    // CLI_WARN("FRACTION = {0}", temp);
+    Fraction temp(Frac.Numerator * -1, Frac.Denominator);
     return temp;
-}
-
-Fraction operator+=(Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Denominator + FracRight.Numerator * FracLeft.Denominator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    FracLeft = temp;
-    // FracLeft.Simplify(FracLeft.Numerator, FracLeft.Denominator);
-    //  CLI_WARN("FRACTION = {0}", temp);
-    return FracLeft;
-}
-
-Fraction operator-(const Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Denominator - FracRight.Numerator * FracLeft.Denominator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    temp.Simplify(temp.Numerator, temp.Denominator);
-
-    return temp;
-}
-
-Fraction operator-=(Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Denominator - FracRight.Numerator * FracLeft.Denominator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    FracLeft = temp;
-    // temp.Simplify(temp.Numerator, temp.Denominator);
-
-    return FracLeft;
-}
-
-Fraction operator*(const Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Numerator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    return temp;
-}
-
-Fraction operator*=(Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Numerator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    FracLeft = temp;
-    return FracLeft;
-}
-
-Fraction operator/(const Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Denominator,
-                  FracLeft.Denominator * FracRight.Numerator);
-    return temp;
-}
-
-Fraction operator/=(Fraction &FracLeft, const Fraction &FracRight)
-{
-    Fraction temp(FracLeft.Numerator * FracRight.Numerator,
-                  FracLeft.Denominator * FracRight.Denominator);
-    FracLeft = temp;
-    return FracLeft;
 }

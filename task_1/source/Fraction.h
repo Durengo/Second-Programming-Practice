@@ -8,58 +8,82 @@ private:
     int Numerator;
     int Denominator;
 
-    float Decimal = 0.0f;
-
+    // Function to find the greatest common divisor using the Euclidian algorithm.
     int GCD(int a, int b);
 
-    void Simplify();
-    void Simplify(Fraction frac);
-    void Simplify(int &num, int &denom);
-
-    void SetNumerator(int num) { Numerator = num; }
-    void SetDenominator(int denom) { Denominator = denom; }
-
+    // Function to format the fraction (denominator cannot be less than or equal to zero; negative sign only on the numerator) and simplify the fraction if possible.
+    void FormatFraction(int &num, int &denom);
 public:
+    Fraction();
+    Fraction(int num);
     Fraction(int num, int denom);
     ~Fraction();
 
-    void Addition(Fraction FracRight);
-    void Addition(int (&FracRight)[2]);
+    // Getters for the Numerator and Denominator.
+    int GetNumerator() const { return Numerator; }
+    int GetDenominator() const { return Denominator; }
 
-    void Subtraction(Fraction FracRight);
-    void Subtraction(int (&FracRight)[2]);
+    // Function for objects to call externally.
+    Fraction Addition(Fraction FracRight);
+    Fraction Addition(int (&FracRight)[2]);
 
-    void Multiplication(Fraction FracRight);
-    void Multiplication(int (&FracRight)[2]);
+    Fraction Subtraction(Fraction FracRight);
+    Fraction Subtraction(int (&FracRight)[2]);
 
-    void Division(Fraction FracRight);
-    void Division(int (&FracRight)[2]);
+    Fraction Multiplication(Fraction FracRight);
+    Fraction Multiplication(int (&FracRight)[2]);
+
+    Fraction Division(Fraction FracRight);
+    Fraction Division(int (&FracRight)[2]);
 
     bool More(Fraction FracRight);
     bool More(int (&FracRight)[2]);
 
-    void Negative();
+    Fraction Negative();
 
-    int GetNumerator() const { return Numerator; }
-    int GetDenominator() const { return Denominator; }
-
+    // Prints fraction using the overloaded << operator with durlib library logging module.
     void Print();
+    // Uses input to set fraction variables with overloaded >> operator.
+    void Set();
+    void Set(const std::string &Temp_Fraction_Name);
 
-    operator int() { return (int)((int)Numerator / (int)Denominator); }
+    // Type conversion operations.
+    // Return an integer that is the division of the numerator by the denominator (casted to double for precision) and finally rounded up.
+    operator int() { return (int)std::ceil(((double)Numerator / (double)Denominator)); }
+    // Return as double or float.
     operator float() { return ((float)Numerator / (float)Denominator); }
     operator double() { return ((double)Numerator) / (double)Denominator; }
+
+    // Binary operations for fractions:
+    // Arithmetic operators:
+    friend Fraction operator+(const Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator-(const Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator*(const Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator/(const Fraction &FracLeft, const Fraction &FracRight);
+
+    // Relation operators:
+    bool Fraction::operator==(const Fraction &FracRight) const;
+    bool Fraction::operator!=(const Fraction &FracRight) const;
+    bool Fraction::operator>(const Fraction &FracRight) const;
+    bool Fraction::operator>=(const Fraction &FracRight) const;
+    bool Fraction::operator<(const Fraction &FracRight) const;
+    bool Fraction::operator<=(const Fraction &FracRight) const;
+
+    // Assignment operators:
+    friend Fraction operator+=(Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator-=(Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator*=(Fraction &FracLeft, const Fraction &FracRight);
+    friend Fraction operator/=(Fraction &FracLeft, const Fraction &FracRight);
+
+    // Input/Output operators:
     friend std::ostream &operator<<(std::ostream &out, const Fraction &frac);
     friend std::istream &operator>>(std::istream &in, Fraction &frac);
-    friend Fraction operator+(const Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator+=(Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator-(const Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator-=(Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator*(const Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator*=(Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator/(const Fraction &FracLeft, const Fraction &FracRight);
-    friend Fraction operator/=(Fraction &FracLeft, const Fraction &FracRight);
+
+    // Negation operator:
+    friend Fraction operator-(const Fraction &Frac);
 };
 
+// Formatting for fmt library.
 template <>
 struct fmt::formatter<Fraction> : fmt::formatter<std::string>
 {
@@ -67,7 +91,7 @@ struct fmt::formatter<Fraction> : fmt::formatter<std::string>
     {
         if ((my.GetNumerator() % my.GetDenominator()) == 0)
         {
-            return format_to(ctx.out(), "{}", my.GetNumerator() / my.GetDenominator());
+            return format_to(ctx.out(), "{}/{} ({})", my.GetNumerator(), my.GetDenominator(), my.GetNumerator() / my.GetDenominator());
         }
         else
         {

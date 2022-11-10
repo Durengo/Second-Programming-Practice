@@ -13,15 +13,18 @@ set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_
 project(durlib VERSION ${PROJECT_VERSION})
 
 find_package(Git QUIET)
+
 set(CMAKE_PREFIX_PATH "C:\\Libraries\\Build\\x64\\msvc17\\fmt")
 find_package(fmt CONFIG REQUIRED)
 set(CMAKE_PREFIX_PATH "C:\\Libraries\\Build\\x64\\msvc17\\spdlog")
 find_package(spdlog CONFIG REQUIRED)
+
 set(CMAKE_TOOLCHAIN_FILE "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
 set(CMAKE_PREFIX_PATH "C:\\vcpkg\\installed\\x64-windows\\share\\jsoncpp")
 find_package(jsoncpp CONFIG REQUIRED)
-#find_package(wxWidgets REQUIRED)
-#find_package(OpenCV REQUIRED)
+
+# find_package(wxWidgets REQUIRED)
+# find_package(OpenCV REQUIRED)
 
 # include(CTest)
 # enable_testing()
@@ -32,7 +35,7 @@ find_package(jsoncpp CONFIG REQUIRED)
 # message("Project version: ${PROJECT_VERSION}")
 # message("Toolchain status: ${CMAKE_TOOLCHAIN_FILE}")
 # message("Cmake include current directory: ${CMAKE_INCLUDE_CURRENT_DIR}")
-#message("CTest status: ${CPACK_PROJECT_NAME} version ${CPACK_PROJECT_VERSION};")
+# message("CTest status: ${CPACK_PROJECT_NAME} version ${CPACK_PROJECT_VERSION};")
 
 # CHECK IF SYSTEMS IS RUNNING WINDOWS AND ADD NECESSARY ATTRIBUTES.
 if(WIN32)

@@ -16,6 +16,11 @@ namespace DURLIB
     bool HasWhitespace(const std::string &text);
     bool validateName(const std::string &name);
     bool isLetters(const std::string_view &text);
+    int Letters(const std::string &text);
     bool isNumbers(const std::string_view &text);
+    int Numbers(const std::string &text);
+    int CountNegation(const std::string &text);
+    bool hasNegation(const std::string_view &text);
+    //int Symbols(const std::string &text);
     bool oneCapital(const std::string &text);
 }
