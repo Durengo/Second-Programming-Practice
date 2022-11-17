@@ -1,5 +1,6 @@
 /build
 /.vscode
+/bck
 /vendor/durlib/vendor/sqlite
 /vendor/fast-cpp-csv-parser/csv.h
 /vendor/fast-cpp-csv-parser/LICENSE
