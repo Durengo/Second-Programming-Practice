@@ -1,0 +1,33 @@
+END-GOAL IMPLEMENTATION IS TO MAKE A "GAME" WHICH GENERATES OBJECTS THEN RANDOMIZES ALL VALUES, PICKS A PLANE, FLIES THE PASSENGERS TO THE DESTINATION AND DISEMBARK ALL PASSENGERS.
+
+
+AIRPORT DATABASE:
+https://airportdatabase.net/lithuania/vilnius-international-airport-vno_2766.html
+
+AIRPORT TYPES:
+https://www.faa.gov/airports/planning_capacity/categories
+
+AIRCRAFT FUEL CONSUMPTION:
+https://www.airliners.net/forum/viewtopic.php?t=1355819
+
+COUNTRY CODES:
+https://www.iban.com/country-codes
+https://country-code.cl/
+
+CALCULATOR BETWEEN TWO POINTS
+https://www.movable-type.co.uk/scripts/latlong.html
+
+RANDOMIZED CSV FILE
+https://www.coderstool.com/csv-test-data-generator
+
+VARIABLES USED:
+AIRPORTS:
+{{city}},{{airport}},{{longitude}},{{latitude}},{{country}}
+PASSENGERS:
+{{firstname}},{{surname}},{{date}}
+
+CSV PARSER LIBRARY:
+https://github.com/vincentlaucsb/csv-parser
+
+SQLITE LIB
+https://github.com/SqliteModernCpp/sqlite_modern_cpp

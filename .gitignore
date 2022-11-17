@@ -1,2 +1,6 @@
 /build
 /.vscode
+/vendor/durlib/vendor/sqlite
+/vendor/fast-cpp-csv-parser/csv.h
+/vendor/fast-cpp-csv-parser/LICENSE
+/vendor/fast-cpp-csv-parser/README.md

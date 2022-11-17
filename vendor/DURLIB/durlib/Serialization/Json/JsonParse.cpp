@@ -2,6 +2,7 @@
 
 #include "durlib/Log/Log.h"
 #include <algorithm>
+#include <fstream>
 
 namespace DURLIB
 {
@@ -107,9 +108,21 @@ namespace DURLIB
             {
                 GetJsonValueIteration(*temp, key, KeyOccurrence, OccurrenceCounter, returnValue, i);
             }
-            if(OccurrenceCounter != KeyOccurrence) { CLI_WARN("KEY NOT FOUND."); return; } // FAIL
-            if(OccurrenceCounter == KeyOccurrence) { CLI_INFO("KEY FOUND! KEY = {0}", returnValue); return; }
-            else { CLI_ERROR("ERROR"); return;}
+            if (OccurrenceCounter != KeyOccurrence)
+            {
+                CLI_WARN("KEY NOT FOUND.");
+                return;
+            } // FAIL
+            if (OccurrenceCounter == KeyOccurrence)
+            {
+                CLI_INFO("KEY FOUND! KEY = {0}", returnValue);
+                return;
+            }
+            else
+            {
+                CLI_ERROR("ERROR");
+                return;
+            }
         }
         catch (Json::Exception &i)
         {
@@ -121,7 +134,10 @@ namespace DURLIB
 
     void JsonParse::GetJsonValueIteration(Json::Value &JsonValue, std::string &Key, int &KeyOccurrence, int &OccurrenceCounter, std::string &ReturnValue, int iteration)
     {
-        if(ReturnValue != "") { return; }
+        if (ReturnValue != "")
+        {
+            return;
+        }
         Json::Value temp = JsonValue;
         std::string tempString;
         try
@@ -134,25 +150,30 @@ namespace DURLIB
                     temp = temp.get(temp.getMemberNames()[iteration], "ERROR");
                     GetJsonValueIteration(temp, Key, KeyOccurrence, OccurrenceCounter, ReturnValue, i);
                 }
-                catch(Json::Exception &i)
+                catch (Json::Exception &i)
                 {
                     CLI_ERROR("{0}", i.what());
                 }
-                if(ReturnValue != "") { return; }
+                if (ReturnValue != "")
+                {
+                    return;
+                }
                 try
                 {
                     tempString = temp.get(Key, "ERROR").asString();
-                    if(tempString == Key)
+                    if (tempString == Key)
                     {
-                        if(OccurrenceCounter == KeyOccurrence) { ReturnValue = tempString; }
+                        if (OccurrenceCounter == KeyOccurrence)
+                        {
+                            ReturnValue = tempString;
+                        }
                         OccurrenceCounter++;
                     }
                 }
-                catch(Json::Exception &i)
+                catch (Json::Exception &i)
                 {
                     CLI_ERROR("{0}", i.what());
                 }
-                
             }
         }
         catch (Json::Exception &i)

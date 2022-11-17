@@ -1,4 +1,4 @@
-#include "Fraction.h"
+#include <durlib.h>
 
 #define EQ1(A, B, C, D) (A/B+C/D)
 #define EQ2(A, B, C, D) ((A*D+B*C)/B*D)
@@ -14,7 +14,7 @@ int main()
 {
     DURLIB::Log::Init();
 
-    Fraction Fraction_A, Fraction_B, Fraction_C, Fraction_D;
+    DURLIB::Fraction Fraction_A, Fraction_B, Fraction_C, Fraction_D;
     CLI_TRACE("This program win run through a series of equations involving fractions.");
 
     Fraction_A.Set("A");
